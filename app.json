@@ -1,0 +1,10 @@
+{
+  "name": "convertExcel2csv",
+  "description": "Java web application to convert an excel file to a csv file",
+  "repository": "https://github.com/Subhojeet21/convertExcel2csv",
+  "buildpacks": [
+    {
+      "url": "heroku/java"
+    }
+  ]
+}
