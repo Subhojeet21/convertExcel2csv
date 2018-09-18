@@ -9,7 +9,7 @@
  
     <body> 
         <div>
-            <h3> Choose Excel File to Convert into CSV </h3>
+            <h3> Choose Excel File to Convert into CSV and Upload to SF</h3>
             <form action="FileUploadHandler" method="post" enctype="multipart/form-data">
                 <input type="file" name="fileName" /><br/><br/>
                 <input type="submit" value="upload" />

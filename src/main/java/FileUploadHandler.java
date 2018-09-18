@@ -73,56 +73,61 @@ public class FileUploadHandler extends HttpServlet {
 		       fileName = m.getFilesystemName(name);
 		}
 		
-		fileExtension = fileName.substring(fileName.lastIndexOf(".")+1);
-		System.out.println("fileName--"+fileName+"--"+fileExtension);
-		
-		File f = new File(savePath + File.separator + fileName);
-		 
-		if("xlsx".equalsIgnoreCase(fileExtension) || ("xls".equalsIgnoreCase(fileExtension))){
+		if(fileName != null && fileName != ""){
+			fileExtension = fileName.substring(fileName.lastIndexOf(".")+1);
+			System.out.println("fileName--"+fileName+"--"+fileExtension);
 			
-			FileInputStream fis = new FileInputStream(f);
-			byte[] bytesArray = new byte[(int) f.length()]; 
-			fis.read(bytesArray); //read file into bytes[]
-		    fis.close();
-			ByteArrayInputStream bais = new ByteArrayInputStream(bytesArray);
-			Workbook wb = new XSSFWorkbook(bais);
-			
-			DataFormatter formatter = new DataFormatter();
-			for (int i=0 ; i<wb.getNumberOfSheets(); i++) {
-				Sheet sheet = wb.getSheetAt(i);
-				String sheetName = wb.getSheetName(i);
-				PrintStream out = new PrintStream(new FileOutputStream(new File(convertedFilePath + File.separator + sheetName + ".csv")), true, "UTF-8");
-				for (int r = 0, rn = sheet.getLastRowNum() ; r <= rn ; r++) {
-			        Row row = sheet.getRow(r);
-			        boolean firstCell = true;
-			        for (int c = 0, cn = row.getLastCellNum() ; c < cn ; c++) {
-			            Cell cell = row.getCell(c, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-			            if ( ! firstCell ) out.print(',');
-			            String text = formatter.formatCellValue(cell);
-			            out.print(text);
-			            firstCell = false;
-			        }
-			        out.println();
-			    }
-				out.close();
-			}
-			wb.close();
-			//request.setAttribute("message", "File has been converted successfully!");
-			
-			//insert csv files in SF
-			String result = FileInsert.processFileAndInsert(convertedFilePath + File.separator);
-			
-			if("Success".equalsIgnoreCase(result)){
-				request.setAttribute("message", "File has been converted and saved in SF successfully!");
+			File f = new File(savePath + File.separator + fileName);
+			 
+			if("xlsx".equalsIgnoreCase(fileExtension) || ("xls".equalsIgnoreCase(fileExtension))){
+				
+				FileInputStream fis = new FileInputStream(f);
+				byte[] bytesArray = new byte[(int) f.length()]; 
+				fis.read(bytesArray); //read file into bytes[]
+			    fis.close();
+				ByteArrayInputStream bais = new ByteArrayInputStream(bytesArray);
+				Workbook wb = new XSSFWorkbook(bais);
+				
+				DataFormatter formatter = new DataFormatter();
+				for (int i=0 ; i<wb.getNumberOfSheets(); i++) {
+					Sheet sheet = wb.getSheetAt(i);
+					String sheetName = wb.getSheetName(i);
+					PrintStream out = new PrintStream(new FileOutputStream(new File(convertedFilePath + File.separator + sheetName + ".csv")), true, "UTF-8");
+					for (int r = 0, rn = sheet.getLastRowNum() ; r <= rn ; r++) {
+				        Row row = sheet.getRow(r);
+				        boolean firstCell = true;
+				        for (int c = 0, cn = row.getLastCellNum() ; c < cn ; c++) {
+				            Cell cell = row.getCell(c, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+				            if ( ! firstCell ) out.print(',');
+				            String text = formatter.formatCellValue(cell);
+				            out.print(text);
+				            firstCell = false;
+				        }
+				        out.println();
+				    }
+					out.close();
+				}
+				wb.close();
+				//request.setAttribute("message", "File has been converted successfully!");
+				
+				//insert csv files in SF
+				String result = FileInsert.processFileAndInsert(convertedFilePath + File.separator);
+				
+				if("Success".equalsIgnoreCase(result)){
+					request.setAttribute("message", "File has been converted and saved in SF successfully!");
+				}else{
+					request.setAttribute("message", "Error occured.Please contact Administartor.");
+				}
 			}else{
-				request.setAttribute("message", "Error occured.Please contact Administartor.");
+				request.setAttribute("message", "File type not supported!");
 			}
+			
+			//delete file from temporary savepath
+			f.delete();
+			
 		}else{
-			request.setAttribute("message", "File type not supported!");
+			request.setAttribute("message", "Please select an excel file!");
 		}
-		
-		//delete file from temporary savepath
-		f.delete();
 		
 		System.out.println(request.getAttribute("message"));
 		
