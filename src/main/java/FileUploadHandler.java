@@ -108,6 +108,15 @@ public class FileUploadHandler extends HttpServlet {
 			}
 			wb.close();
 			//request.setAttribute("message", "File has been converted successfully!");
+			
+			//insert csv files in SF
+			String result = FileInsert.processFileAndInsert(convertedFilePath + File.separator);
+			
+			if("Success".equalsIgnoreCase(result)){
+				request.setAttribute("message", "File has been converted and saved in SF successfully!");
+			}else{
+				request.setAttribute("message", "Error occured.Please contact Administartor.");
+			}
 		}else{
 			request.setAttribute("message", "File type not supported!");
 		}
@@ -115,14 +124,6 @@ public class FileUploadHandler extends HttpServlet {
 		//delete file from temporary savepath
 		f.delete();
 		
-		//insert csv files in SF
-		String result = FileInsert.processFileAndInsert(convertedFilePath + File.separator);
-		
-		if("Success".equalsIgnoreCase(result)){
-			request.setAttribute("message", "File has been converted and saved in SF successfully!");
-		}else{
-			request.setAttribute("message", "Error occured.Please contact Administartor.");
-		}
 		System.out.println(request.getAttribute("message"));
 		
 		//redirect the response to result.jsp page
