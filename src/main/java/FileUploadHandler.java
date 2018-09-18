@@ -96,12 +96,14 @@ public class FileUploadHandler extends HttpServlet {
 					for (int r = 0, rn = sheet.getLastRowNum() ; r <= rn ; r++) {
 				        Row row = sheet.getRow(r);
 				        boolean firstCell = true;
-				        for (int c = 0, cn = row.getLastCellNum() ; c < cn ; c++) {
-				            Cell cell = row.getCell(c, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-				            if ( ! firstCell ) out.print(',');
-				            String text = formatter.formatCellValue(cell);
-				            out.print(text);
-				            firstCell = false;
+				        if(row != null){
+				        	for (int c = 0, cn = row.getLastCellNum() ; c < cn ; c++) {
+					            Cell cell = row.getCell(c, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+					            if ( ! firstCell ) out.print(',');
+					            String text = formatter.formatCellValue(cell);
+					            out.print(text);
+					            firstCell = false;
+					        }
 				        }
 				        out.println();
 				    }
