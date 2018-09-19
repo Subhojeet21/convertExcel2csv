@@ -79,7 +79,7 @@ public class FileUploadHandler extends HttpServlet {
 			
 			File f = new File(savePath + File.separator + fileName);
 			 
-			if("xlsx".equalsIgnoreCase(fileExtension) || ("xls".equalsIgnoreCase(fileExtension))){
+			if("xlsx".equalsIgnoreCase(fileExtension) || ("xlsm".equalsIgnoreCase(fileExtension))){
 				
 				FileInputStream fis = new FileInputStream(f);
 				byte[] bytesArray = new byte[(int) f.length()]; 
