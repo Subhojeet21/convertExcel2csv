@@ -66,7 +66,7 @@ public class FileUploadHandler extends HttpServlet {
         	convfileSaveDir.mkdir();
         }
 		
-		MultipartRequest m = new MultipartRequest(request, savePath);
+		MultipartRequest m = new MultipartRequest(request, savePath, request.getParts().size());
 		Enumeration files = m.getFileNames(); 
 		while (files.hasMoreElements()) { 
 			   String name =(String)files.nextElement();
