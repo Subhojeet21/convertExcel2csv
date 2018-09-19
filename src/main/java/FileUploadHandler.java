@@ -31,6 +31,7 @@ public class FileUploadHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String SAVE_DIR = "New";
 	private static final String CONVERTED_FILE_DIR = "Converted";
+	private static final Integer MAX_FILE_SIZE = 2097152; //2MB of default size
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -66,7 +67,7 @@ public class FileUploadHandler extends HttpServlet {
         	convfileSaveDir.mkdir();
         }
 		
-		MultipartRequest m = new MultipartRequest(request, savePath);
+		MultipartRequest m = new MultipartRequest(request, savePath, MAX_FILE_SIZE);
 		Enumeration files = m.getFileNames(); 
 		while (files.hasMoreElements()) { 
 			   String name =(String)files.nextElement();
@@ -79,7 +80,7 @@ public class FileUploadHandler extends HttpServlet {
 			
 			File f = new File(savePath + File.separator + fileName);
 			 
-			if("xlsx".equalsIgnoreCase(fileExtension) || ("xls".equalsIgnoreCase(fileExtension))){
+			if("xlsx".equalsIgnoreCase(fileExtension) || ("xlsm".equalsIgnoreCase(fileExtension))){
 				
 				FileInputStream fis = new FileInputStream(f);
 				byte[] bytesArray = new byte[(int) f.length()]; 
